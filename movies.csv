@@ -1,5 +1,2 @@
-title,rating,year
-Titanic,9.2,1995
-The Dark Knight,8.8,2002
-Seven,8.9,1995
-dudi,5.6,2003
+title,year,rating,poster_url
+Seven Samurai,1954,8.6,https://m.media-amazon.com/images/M/MV5BZjliMWExOTMtZDQ3ZS00NWU3LWIyN2EtMjllNzk3ZTNlYzg4XkEyXkFqcGc@._V1_SX300.jpg

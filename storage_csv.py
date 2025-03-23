@@ -5,7 +5,6 @@ from istorage import IStorage
 
 class StorageCSV(IStorage):
 
-
     def __init__(self, file_path):
         """instantiates self.movies with csv data"""
         try:
@@ -17,6 +16,7 @@ class StorageCSV(IStorage):
             print("File not found!")
             return
 
+
     def _save_movies(self):
         """saves changes by overwriting the current csv file"""
         with open(self._file_path, mode="w") as handle:
@@ -24,4 +24,3 @@ class StorageCSV(IStorage):
             writer = csv.DictWriter(handle, fieldnames=fieldnames)
             writer.writeheader()  # Write header row
             writer.writerows(self._movies)
-

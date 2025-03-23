@@ -2,6 +2,7 @@ import json
 import math
 import random
 from abc import ABC, abstractmethod
+import data_fetcher
 
 
 class IStorage(ABC):
@@ -9,6 +10,7 @@ class IStorage(ABC):
     def __init__(self, movies, file_path):
         self._movies = movies
         self._file_path = file_path
+
 
     def list_movies(self):
         """prints total amount and list of movies"""
@@ -18,10 +20,21 @@ class IStorage(ABC):
                 print(f"{movie['title']} ({movie['year']}): {movie['rating']}")
 
 
-    def add_movie(self, title, year, rating, poster):
-        """allows user to add a movie with release year and rating and name of the poster"""
+    def add_movie(self, title):
+        """allows user to add a movie with release year and rating"""
+        movie_info = data_fetcher.get_movie_info_by_title(title)
+        if movie_info is None:
+            return
+        if "Error" in movie_info:
+            print("Movie not found!")
+            return
+        title = movie_info["Title"]
+        rating = movie_info["imdbRating"]
+        year = movie_info["Year"]
+        poster_url = movie_info["Poster"]
+
         if not any(movie["title"] == title for movie in self._movies):
-            self._movies.append({"title": title, "year": year, "rating": rating})
+            self._movies.append({"title": title, "year": year, "rating": rating, "poster_url": poster_url})
             self._save_movies()
             print("Movie added successfully!")
         else:
@@ -125,6 +138,7 @@ class IStorage(ABC):
         for valid_movie in valid_movies:
             print(f"{valid_movie['title']} ({valid_movie['year']}): {valid_movie['rating']}")
 
+
     @abstractmethod
     def _save_movies(self):
-       pass
+        pass

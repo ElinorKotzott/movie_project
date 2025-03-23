@@ -70,24 +70,7 @@ class MovieApp:
     def __command_add_movie(self):
         """allows user to add a movie with release year and rating"""
         title = input("Please enter the movie name! ")
-        poster = input("Please enter the poster name!")
-
-        print("Please enter the year! ", end="")
-        while True:
-            try:
-                year = int(input(""))
-                break
-            except ValueError:
-                print("Please enter a number! ")
-
-        print("Please enter the movie rating! ", end="")
-        while True:
-            try:
-                rating = float(input(""))
-                break
-            except ValueError:
-                print("Please enter a number! ")
-        self._storage.add_movie(title, year, rating, poster)
+        self._storage.add_movie(title)
 
 
     def __command_delete_movie(self):
