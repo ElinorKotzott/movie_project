@@ -7,9 +7,7 @@ class App:
 
 
     def create_website(self, movies):
-        print(movies)
-
-
+        """renders index.html using movies list of dictionaries"""
         @self.app.route('/')
         def index():
             return render_template('index.html', movies=movies)

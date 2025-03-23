@@ -9,6 +9,7 @@ url = f"http://www.omdbapi.com/?apikey={API_KEY}"
 
 
 def get_movie_info_by_title(title):
+    """makes api call based on title chosen by user"""
     try:
         return requests.get(url + "&t=" + title).json()
     except requests.exceptions.ConnectionError:

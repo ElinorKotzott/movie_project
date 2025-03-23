@@ -1,4 +1,3 @@
-import json
 import math
 import random
 import subprocess
@@ -9,12 +8,13 @@ import data_fetcher
 class IStorage(ABC):
 
     def __init__(self, movies, file_path):
+        """instantiates protected movies and file path from child super calls"""
         self._movies = movies
         self._file_path = file_path
 
 
     def list_movies(self):
-        """prints total amount and list of movies"""
+        """prints total amount and list of movies and returns movies"""
         if self._movies is not None:
             print(f"{len(self._movies)} movies in total")
             for movie in self._movies:
@@ -23,7 +23,7 @@ class IStorage(ABC):
 
 
     def add_movie(self, title):
-        """allows user to add a movie with release year and rating"""
+        """allows user to add a movie by title"""
         movie_info = data_fetcher.get_movie_info_by_title(title)
         if movie_info is None:
             return
@@ -55,8 +55,7 @@ class IStorage(ABC):
 
 
     def update_movie(self, title, rating):
-        """allowing user to update movie rating if the desired movie exists in the list"""
-        # checking whether the desired movie exists and assigning it to mov, otherwise mov will be None
+        """allowing user to update movie rating if the desired movie exists"""
         to_update = next((movie for movie in self._movies if movie["title"].lower() == title), None)
 
         if to_update is None:
@@ -68,6 +67,7 @@ class IStorage(ABC):
 
 
     def print_stats(self):
+        """calculates stats and prints them"""
         amount_of_ratings = len(self._movies)
         ratings_sum = sum([movie["rating"] for movie in self._movies])
         average_rating = round(ratings_sum / amount_of_ratings, 1)
@@ -99,6 +99,8 @@ class IStorage(ABC):
 
 
     def search_movie(self, user_search):
+        """allows user to search a movie by name or fragment of the name
+        and prints info of found movie"""
         found = False
         for movie in self._movies:
             if user_search in movie["title"].lower():
@@ -109,18 +111,22 @@ class IStorage(ABC):
 
 
     def print_random_movie(self):
+        """randomly chooses and prints a movie"""
         random_movie = random.choice(self._movies)
         print(f"Your random movie for today is '{random_movie['title']}' "
               f"({random_movie['year']}) with a rating of {random_movie['rating']}")
 
 
     def sort_by_rating(self):
+        """prints movies sorted by rating in descending order"""
         movies_sorted_by_rating_descending = sorted(self._movies, key=lambda movie: movie["rating"], reverse=True)
         for mov in movies_sorted_by_rating_descending:
             print(f"{mov['title']} ({mov['year']}): {mov['rating']}")
 
 
     def sort_by_year(self, user_input):
+        """prints movies sorted by year, either descending or ascending,
+        depending on user choice"""
         if user_input == "n":
             movies_sorted_by_year = sorted(self._movies, key=lambda movie: movie["year"])
         if user_input == "y":
@@ -131,9 +137,11 @@ class IStorage(ABC):
 
 
     def generate_website(self):
+        """generates website using flask"""
         subprocess.run(['python', 'app.py'])
 
 
     @abstractmethod
     def _save_movies(self):
+        """forces child classes to implement method"""
         pass

@@ -7,6 +7,9 @@ class MovieApp:
 
 
     def run(self):
+        """starts application loop, printing header and menu, getting user input for
+        the menu and sending user choice in to be processed"""
+        self.__print_header()
         while True:
             self.__display_menu()
             user_choice = (input("Enter a number between 0 and 10: "))
@@ -39,6 +42,7 @@ class MovieApp:
 
 
     def __validate_input(self, data_type):
+        """validates user input and returns it"""
         while True:
             user_input = input("")
             if user_input == "":
@@ -67,23 +71,25 @@ class MovieApp:
 
 
     def __command_list_movies(self):
+        """calls list_movies on an instance of iStorage"""
         self._storage.list_movies()
 
 
     def __command_add_movie(self):
-        """allows user to add a movie with release year and rating"""
+        """asks for user input and calls add_movie on an instance of iStorage"""
         title = input("Please enter the movie name! ")
         self._storage.add_movie(title)
 
 
     def __command_delete_movie(self):
-        """checks if chosen movie exists and, if yes, deletes it"""
+        """asks for user input and calls delete_movie on an instance of iStorage"""
         to_delete = input("Which movie would you like to delete? ").lower()
         self._storage.delete_movie(to_delete)
 
 
     def __command_update_movie(self):
-        """allowing user to update movie rating if the desired movie exists in the list"""
+        """asks for user_input for title and new rating, sending both into the call
+        of update_movie on an instance of iStorage"""
         title = input("Which movie would you like to update? ").lower()
 
         while True:
@@ -97,29 +103,28 @@ class MovieApp:
 
 
     def __command_print_stats(self):
-        """calculating and printing average, median and lowest and highest ratings"""
-        # summing up, dividing by length and printing average
+        """calls print_stats on an instance of iStorage"""
         self._storage.print_stats()
 
 
     def __command_print_random_movie(self):
-        """choosing and printing a random movie from the movies list"""
+        """calls print_random_movie on an instance of iStorage"""
         self._storage.print_random_movie()
 
 
     def __command_search_movie(self):
-        """allows user to search movies using a part of the title"""
+        """gets user input and calls search_movie on an instance of iStorage"""
         user_search = input("Please type a part of the movie title! ").lower()
         self._storage.search_movie(user_search)
 
 
     def __command_sort_by_rating(self):
-        """prints movies sorted by rating, descending"""
+        """calls sort_by_rating on an instance of iStorage"""
         self._storage.sort_by_rating()
 
 
     def __command_sort_by_year(self):
-        """sorting our movies list ascending or descending depending on the user's choice"""
+        """gets user_input and calls sort_by_year on an instance of iStorage"""
         print("Do you want the latest movies first? (Y/N)")
         while True:
             user_input = input("").lower()
@@ -131,5 +136,7 @@ class MovieApp:
 
 
     def __command_generate_website(self):
+        """creates an instance of the App class and calls create_website on it, sending in the movies
+        returned by list_movies"""
         my_app = App()
         my_app.create_website(self._storage.list_movies())
