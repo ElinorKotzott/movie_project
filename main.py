@@ -1,10 +1,9 @@
 from movie_app import MovieApp
-from storage_csv import StorageCSV
-from storage_json import StorageJson
+from storage.storage_json import StorageJson
 
 
 # storage = StorageCSV('movies.csv')
-storage = StorageJson('movies.json')
+storage = StorageJson('data/movies.json')
 if storage is not None:
     movie_app = MovieApp(storage)
     movie_app.run()

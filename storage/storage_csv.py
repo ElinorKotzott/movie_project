@@ -1,6 +1,6 @@
 import csv
 
-from istorage import IStorage
+from storage.istorage import IStorage
 
 
 class StorageCSV(IStorage):
