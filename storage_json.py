@@ -1,5 +1,6 @@
 import json
 import math
+import random
 
 from istorage import IStorage
 
@@ -25,10 +26,12 @@ class StorageJson(IStorage):
 
     def add_movie(self, title, year, rating, poster):
         """allows user to add a movie with release year and rating"""
-        self.movies.append({"title": title, "year": year, "rating": rating})
-        self.__save_movies()
-        print("Movie added successfully!")
-
+        if not any(movie["title"] == title for movie in self.movies):
+            self.movies.append({"title": title, "year": year, "rating": rating})
+            self.__save_movies()
+            print("Movie added successfully!")
+        else:
+            print("Movie cannot be added because it already exists!")
 
 
     def delete_movie(self, title):
@@ -44,23 +47,16 @@ class StorageJson(IStorage):
 
     def update_movie(self, title, rating):
         """allowing user to update movie rating if the desired movie exists in the list"""
-        to_update = input("Which movie would you like to update? ").lower()
         # checking whether the desired movie exists and assigning it to mov, otherwise mov will be None
-        mov = next((movie for movie in self.movies if movie["title"].lower() == to_update), None)
+        to_update = next((movie for movie in self.movies if movie["title"].lower() == title), None)
 
-        if mov is None:
+        if to_update is None:
             return
 
-        while True:
-            print("Please enter a new rating! ")
-            try:
-                new_rating = float(input(""))
-                mov["rating"] = new_rating
-                self.__save_movies()
-                print("The movie has been updated successfully!")
-                break
-            except ValueError:
-                print("Invalid rating! ")
+        to_update["rating"] = rating
+        self.__save_movies()
+        print("The movie has been updated successfully!")
+
 
     def print_stats(self):
         amount_of_ratings = len(self.movies)
@@ -92,7 +88,8 @@ class StorageJson(IStorage):
         print(f"The movies with the highest rating is/are: {', '.join(highest_rated_movies)}"
               f"with a rating of {highest_rating}")
 
-    def __search_movie(self, user_search):
+
+    def search_movie(self, user_search):
         found = False
         for movie in self.movies:
             if user_search in movie["title"].lower():
@@ -100,6 +97,39 @@ class StorageJson(IStorage):
                 found = True
         if not found:
             print("This movie doesn't exist!")
+
+
+    def print_random_movie(self):
+        random_movie = random.choice(self.movies)
+        print(f"Your random movie for today is '{random_movie['title']}' "
+              f"({random_movie['year']}) with a rating of {random_movie['rating']}")
+
+
+    def sort_by_rating(self):
+        movies_sorted_by_rating_descending = sorted(self.movies, key=lambda movie: movie["rating"], reverse=True)
+        for mov in movies_sorted_by_rating_descending:
+            print(f"{mov['title']} ({mov['year']}): {mov['rating']}")
+
+
+    def sort_by_year(self, user_input):
+        if user_input == "n":
+            movies_sorted_by_year = sorted(self.movies, key=lambda movie: movie["year"])
+        if user_input == "y":
+            movies_sorted_by_year = sorted(self.movies, key=lambda movie: movie["year"], reverse=True)
+
+        for mov in movies_sorted_by_year:
+            print(f"{mov['title']} ({mov['year']}): {mov['rating']}")
+
+
+    def filter_movies(self, min_rating, start_year, end_year):
+        # creating list of movies that fit the criteria defined by the user
+        valid_movies = [movie for movie in self.movies if
+                        (min_rating is None or movie["rating"] >= min_rating)
+                        and (start_year is None or start_year <= movie["year"])
+                        and (end_year is None or movie["year"] <= end_year)]
+
+        for valid_movie in valid_movies:
+            print(f"{valid_movie['title']} ({valid_movie['year']}): {valid_movie['rating']}")
 
 
     def __save_movies(self):
