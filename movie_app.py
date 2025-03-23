@@ -1,3 +1,6 @@
+from app import App
+
+
 class MovieApp:
     def __init__(self, storage):
         self._storage = storage
@@ -30,7 +33,7 @@ class MovieApp:
             "7": self.__command_search_movie,
             "8": self.__command_sort_by_rating,
             "9": self.__command_sort_by_year,
-            "10": self.__command_filter_movies
+            "10": self.__command_generate_website
         }
         possible_choices[user_input]()
 
@@ -59,7 +62,7 @@ class MovieApp:
         print()
         print("Menu:\n0. Exit\n1. List movies\n2. Add movie\n3. Delete movie\n"
               "4. Update movie\n5. Stats\n6. Random movie\n7. Search movie\n"
-              "8. Movies sorted by rating\n9. Movies sorted by year\n10. Filter movies")
+              "8. Movies sorted by rating\n9. Movies sorted by year\n10. Generate website")
         print()
 
 
@@ -127,19 +130,6 @@ class MovieApp:
                 break
 
 
-    def __command_filter_movies(self):
-        """prints movies that fulfill conditions defined by user"""
-        print("Enter minimum rating - leave blank for no minimum rating ")
-        minimum_rating = self.__validate_input(float)
-
-        print("Enter start year - leave blank for no start year! ")
-        start_year = self.__validate_input(int)
-
-        print("Enter end year - leave blank for no end year! ")
-        end_year = self.__validate_input(int)
-
-        self._storage.filter_movies(minimum_rating, start_year, end_year)
-
-
-    def _generate_website(self):
-        ...
+    def __command_generate_website(self):
+        my_app = App()
+        my_app.create_website(self._storage.list_movies())

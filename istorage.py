@@ -1,6 +1,7 @@
 import json
 import math
 import random
+import subprocess
 from abc import ABC, abstractmethod
 import data_fetcher
 
@@ -18,6 +19,7 @@ class IStorage(ABC):
             print(f"{len(self._movies)} movies in total")
             for movie in self._movies:
                 print(f"{movie['title']} ({movie['year']}): {movie['rating']}")
+        return self._movies
 
 
     def add_movie(self, title):
@@ -128,15 +130,8 @@ class IStorage(ABC):
             print(f"{mov['title']} ({mov['year']}): {mov['rating']}")
 
 
-    def filter_movies(self, min_rating, start_year, end_year):
-        # creating list of movies that fit the criteria defined by the user
-        valid_movies = [movie for movie in self._movies if
-                        (min_rating is None or movie["rating"] >= min_rating)
-                        and (start_year is None or start_year <= movie["year"])
-                        and (end_year is None or movie["year"] <= end_year)]
-
-        for valid_movie in valid_movies:
-            print(f"{valid_movie['title']} ({valid_movie['year']}): {valid_movie['rating']}")
+    def generate_website(self):
+        subprocess.run(['python', 'app.py'])
 
 
     @abstractmethod
