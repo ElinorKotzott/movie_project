@@ -2,7 +2,7 @@ import math
 import random
 import subprocess
 from abc import ABC, abstractmethod
-import data_fetcher
+from db_access import data_fetcher
 
 
 class IStorage(ABC):
