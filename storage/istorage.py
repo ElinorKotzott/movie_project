@@ -31,8 +31,8 @@ class IStorage(ABC):
             print("Movie not found!")
             return
         title = movie_info["Title"]
-        rating = movie_info["imdbRating"]
-        year = movie_info["Year"]
+        rating = float(movie_info["imdbRating"])
+        year = int(movie_info["Year"])
         poster_url = movie_info["Poster"]
 
         if not any(movie["title"] == title for movie in self._movies):
@@ -69,7 +69,7 @@ class IStorage(ABC):
     def print_stats(self):
         """calculates stats and prints them"""
         amount_of_ratings = len(self._movies)
-        ratings_sum = sum([movie["rating"] for movie in self._movies])
+        ratings_sum = sum([float(movie["rating"]) for movie in self._movies])
         average_rating = round(ratings_sum / amount_of_ratings, 1)
         print(f"The average movie rating is: {average_rating}")
 
@@ -93,9 +93,9 @@ class IStorage(ABC):
 
         # printing all of them at the same time with join()
         print(f"The movies with the lowest rating is/are: {', '.join(lowest_rated_movies)}"
-              f"with a rating of {lowest_rating}")
+              f" with a rating of {lowest_rating}")
         print(f"The movies with the highest rating is/are: {', '.join(highest_rated_movies)}"
-              f"with a rating of {highest_rating}")
+              f" with a rating of {highest_rating}")
 
 
     def search_movie(self, user_search):

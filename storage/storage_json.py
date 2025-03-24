@@ -10,10 +10,10 @@ class StorageJson(IStorage):
         try:
             with open(file_path, "r") as handle:
                 movies = json.load(handle)
-            super().__init__(movies, file_path)
-        except FileNotFoundError:
-            print("File not found!")
-            return
+        except  (json.JSONDecodeError, FileNotFoundError):
+            print("File not found or empty - starting with empty movies file")
+            movies = []
+        super().__init__(movies, file_path)
 
 
     def _save_movies(self):
